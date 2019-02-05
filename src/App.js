@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import * as PIXI from 'pixi.js';
 
-import ShowKeys from './ShowKeys.js';
-
 import "./App.css";
 
 class App extends Component {
@@ -15,18 +13,13 @@ class App extends Component {
         this.state = {
             connecting: false,
             connected: false,
-            keys: {
-                "a": false,
-                "s": false,
-                "d": false,
-                "w": false,
-                "j": false,
-                "k": false,
-                "l": false,
-                "i": false,
-            },
+            fire: null,
+            move: null,
         };
     }
+
+    static fireKeys = ["a", "s", "d", "w"];
+    static moveKeys = ["j", "k", "l", "i"];
 
     OnConnected = (socket) => {
         console.log("Connected.");
@@ -112,37 +105,59 @@ class App extends Component {
         if (e.repeat) {
             return;
         }
-        if (this.state.keys[key] === undefined) {
+        let fireIndex = App.fireKeys.indexOf(key);
+        if (fireIndex >= 0) {
+            this.setState({fire: key});
+            if (this.socket) {
+                this.socket.send(
+                    JSON.stringify({
+                        type: "fire",
+                        key: key
+                    })
+                );
+            }
             return;
         }
-        this.setState(state => ({
-            keys: {...state.keys, [key]: true}
-        }));
-        if (this.socket) {
-            this.socket.send(
-                JSON.stringify({
-                    type: "keyDown",
-                    key: key
-                })
-            );
+        let moveIndex = App.moveKeys.indexOf(key);
+        if (moveIndex >= 0) {
+            this.setState({move: key});
+            if (this.socket) {
+                this.socket.send(
+                    JSON.stringify({
+                        type: "move",
+                        key: key
+                    })
+                );
+            }
+            return;
         }
     }
 
     onKeyUp = (e) => {
         let key = e.key;
-        if (this.state.keys[key] === undefined) {
+        if (this.state.fire === key) {
+            this.setState({fire: null});
+            if (this.socket) {
+                this.socket.send(
+                    JSON.stringify({
+                        type: "fire",
+                        key: null
+                    })
+                );
+            }
             return;
         }
-        this.setState(state => ({
-            keys: {...state.keys, [key]: false}
-        }));
-        if (this.socket) {
-            this.socket.send(
-                JSON.stringify({
-                    type: "keyUp",
-                    key: key
-                })
-            );
+        if (this.state.move === key) {
+            this.setState({move: null});
+            if (this.socket) {
+                this.socket.send(
+                    JSON.stringify({
+                        type: "move",
+                        key: null
+                    })
+                );
+            }
+            return;
         }
     }
 
@@ -238,7 +253,8 @@ class App extends Component {
                 {stage}
                 {connection}
                 <div className="App-debug">
-                    <ShowKeys keys={this.state.keys} />
+                    <div>Fire: {this.state.fire}</div>
+                    <div>Move: {this.state.move}</div>
                 </div>
             </div>
         );
