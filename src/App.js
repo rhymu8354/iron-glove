@@ -79,10 +79,12 @@ class App extends Component {
 
     onKeyDown = (e) => {
         let key = e.key;
+        if (e.repeat) {
+            return;
+        }
         if (this.state.keys[key] === undefined) {
             return;
         }
-        console.log("Key down:", e, key);
         this.setState(state => ({
             keys: {...state.keys, [key]: true}
         }));
