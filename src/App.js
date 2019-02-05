@@ -34,6 +34,11 @@ class App extends Component {
             connecting: false,
             connected: true,
         });
+        this.socket.send(
+            JSON.stringify({
+                type: "hello",
+            })
+        );
     }
 
     OnSocketError = () => {
