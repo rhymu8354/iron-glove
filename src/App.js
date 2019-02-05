@@ -79,6 +79,9 @@ class App extends Component {
 
     onKeyDown = (e) => {
         let key = e.key;
+        if (this.state.keys[key] === undefined) {
+            return;
+        }
         console.log("Key down:", e, key);
         this.setState(state => ({
             keys: {...state.keys, [key]: true}
@@ -87,6 +90,9 @@ class App extends Component {
 
     onKeyUp = (e) => {
         let key = e.key;
+        if (this.state.keys[key] === undefined) {
+            return;
+        }
         this.setState(state => ({
             keys: {...state.keys, [key]: false}
         }));
