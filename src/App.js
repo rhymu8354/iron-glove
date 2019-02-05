@@ -10,6 +10,7 @@ class App extends Component {
         super(props);
         this.pixiContainer = null;
         this.time = 0.0;
+        this.sprites = {};
         this.socket = null;
         this.state = {
             connecting: false,
@@ -60,8 +61,32 @@ class App extends Component {
         this.socket.close();
     }
 
+    OnServerRender = (message) => {
+        let spritesToKeep = {};
+        message.sprites.forEach(spriteData => {
+            let sprite = this.sprites[spriteData.id];
+            if (!sprite) {
+                console.log(`Adding sprite ${spriteData.id}`);
+                sprite = this.SpriteFromTexture(spriteData.texture);
+                this.app.stage.addChild(sprite);
+                this.sprites[spriteData.id] = sprite;
+            }
+            sprite.x = spriteData.x * 64;
+            sprite.y = spriteData.y * 64;
+            spritesToKeep[spriteData.id] = sprite;
+        });
+        Object.keys(this.sprites).forEach(id => {
+            if (!spritesToKeep[id]) {
+                console.log(`Removing sprite ${id}`);
+                this.app.stage.removeChild(this.sprites[id]);
+            }
+        });
+        this.sprites = spritesToKeep;
+    }
+
     MESSAGE_HANDLERS = {
-    };
+        "render": this.OnServerRender
+    }
 
     OnMessageReceived = (message) => {
         let handler = this.MESSAGE_HANDLERS[message["type"]];
@@ -143,23 +168,22 @@ class App extends Component {
         );
     }
 
-    Setup = () => {
-        // const avatarTexture = PIXI.loader.resources["avatar.png"].texture;
-        // avatarTexture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-        // this.avatar = new PIXI.Sprite(avatarTexture);
-        // this.avatar.anchor.x = 0.5;
-        // this.avatar.anchor.y = 0.5;
-        // this.avatar.x = this.app.view.width / 2;
-        // this.avatar.y = this.app.view.height / 2;
-        // this.app.stage.addChild(this.avatar);
-        // this.app.ticker.add(delta => this.Tick(delta));
+    SpriteFromTexture = (texture) => {
+        let sprite = new PIXI.Sprite(this.textures[texture]);
+        sprite.scale.set(4, 4);
+        sprite.anchor.x = 0;
+        sprite.anchor.y = 0;
+        return sprite;
     };
 
-    Tick = (delta) => {
-        this.time += delta / 60;
-        // this.avatar.rotation = this.time * 2 * Math.PI / 2;
-        // const scale = 2.0 + Math.sin(this.time * 2 * Math.PI) * 1;
-        // this.avatar.scale.set(scale, scale);
+    Setup = () => {
+        this.textures = {}
+        for (const textureName of ["hero", "monster"]) {
+            console.log("Loading texture: ", textureName);
+            const texture = PIXI.loader.resources["rhymuArt.json"].textures[textureName + ".png"];
+            texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+            this.textures[textureName] = texture;
+        }
     };
 
     componentDidMount() {
@@ -171,7 +195,7 @@ class App extends Component {
         this.pixiContainer.appendChild(this.app.view);
         this.app.start();
         PIXI.loader
-//            .add("avatar.png")
+            .add("rhymuArt.json")
             .load(this.Setup);
     }
 
