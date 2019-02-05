@@ -1,10 +1,6 @@
 import React from "react";
 
 class ShowKeys extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         let report = "Keys: ";
         let first = true;
