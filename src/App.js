@@ -88,6 +88,14 @@ class App extends Component {
         this.setState(state => ({
             keys: {...state.keys, [key]: true}
         }));
+        if (this.socket) {
+            this.socket.send(
+                JSON.stringify({
+                    type: "keyDown",
+                    key: key
+                })
+            );
+        }
     }
 
     onKeyUp = (e) => {
@@ -98,6 +106,14 @@ class App extends Component {
         this.setState(state => ({
             keys: {...state.keys, [key]: false}
         }));
+        if (this.socket) {
+            this.socket.send(
+                JSON.stringify({
+                    type: "keyUp",
+                    key: key
+                })
+            );
+        }
     }
 
     Connect = () => {
