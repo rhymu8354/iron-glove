@@ -1,6 +1,6 @@
 {"frames": {
 
-"hero.png":
+"floor.png":
 {
 	"frame": {"x":0,"y":0,"w":16,"h":16},
 	"rotated": false,
@@ -8,9 +8,25 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
 	"sourceSize": {"w":16,"h":16}
 },
-"monster.png":
+"hero.png":
 {
 	"frame": {"x":16,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"monster.png":
+{
+	"frame": {"x":32,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"wall.png":
+{
+	"frame": {"x":48,"y":0,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -21,8 +37,8 @@
 	"version": "1.0",
 	"image": "rhymuArt.png",
 	"format": "RGBA8888",
-	"size": {"w":32,"h":16},
+	"size": {"w":64,"h":16},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:a39aefdd30c2626ab90c8ea0e2d78079:2d429a337ac77c589dccf0771b88b5b9:c3d88e630526f4dff24d4f6375d0257a$"
+	"smartupdate": "$TexturePacker:SmartUpdate:31ef2c4ea6ce0c9a11f937e7e832a67f:3fc62dc65b76e3c2f37f06e28b4dbef0:c3d88e630526f4dff24d4f6375d0257a$"
 }
 }

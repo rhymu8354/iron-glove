@@ -15,6 +15,7 @@ class App extends Component {
             connected: false,
             fire: null,
             move: null,
+            health: null,
         };
     }
 
@@ -61,6 +62,7 @@ class App extends Component {
             if (!sprite) {
                 console.log(`Adding sprite ${spriteData.id}`);
                 sprite = this.SpriteFromTexture(spriteData.texture);
+                sprite.z = spriteData.z;
                 this.app.stage.addChild(sprite);
                 this.sprites[spriteData.id] = sprite;
             }
@@ -74,7 +76,11 @@ class App extends Component {
                 this.app.stage.removeChild(this.sprites[id]);
             }
         });
+        this.app.stage.children.sort((a, b) => a.z - b.z);
         this.sprites = spritesToKeep;
+        this.setState({
+            health: message.health
+        });
     }
 
     MESSAGE_HANDLERS = {
@@ -193,7 +199,7 @@ class App extends Component {
 
     Setup = () => {
         this.textures = {}
-        for (const textureName of ["hero", "monster"]) {
+        for (const textureName of ["floor", "hero", "monster", "wall"]) {
             console.log("Loading texture: ", textureName);
             const texture = PIXI.loader.resources["rhymuArt.json"].textures[textureName + ".png"];
             texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
@@ -252,6 +258,9 @@ class App extends Component {
             <div className="App">
                 {stage}
                 {connection}
+                <div>
+                    <h2>Health: {this.state.health}</h2>
+                </div>
                 <div className="App-debug">
                     <div>Fire: {this.state.fire}</div>
                     <div>Move: {this.state.move}</div>
