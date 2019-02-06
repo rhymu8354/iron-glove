@@ -7,7 +7,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.pixiContainer = null;
-        this.time = 0.0;
+        this.deltaTime = 0.0;
         this.sprites = {};
         this.socket = null;
         this.state = {
@@ -70,6 +70,14 @@ class App extends Component {
             }
             sprite.x = spriteData.x * 16 * 3;
             sprite.y = spriteData.y * 16 * 3;
+            if (spriteData.motion) {
+                sprite.motion = {
+                    x: sprite.x,
+                    y: sprite.y,
+                    dx: spriteData.motion.dx,
+                    dy: spriteData.motion.dy,
+                };
+            }
             spritesToKeep[spriteData.id] = sprite;
         });
         Object.keys(this.sprites).forEach(id => {
@@ -83,6 +91,7 @@ class App extends Component {
         this.setState({
             health: message.health
         });
+        this.deltaTime = 0.0;
     }
 
     MESSAGE_HANDLERS = {
@@ -207,6 +216,19 @@ class App extends Component {
             texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
             this.textures[textureName] = texture;
         }
+        this.app.ticker.add(delta => this.Tick(delta));
+    };
+
+    Tick = (delta) => {
+        this.deltaTime += delta / 60;
+        console.log("tick:", this.deltaTime);
+        let deltaMotion = this.deltaTime * 16 * 3 / 0.1;
+        Object.values(this.sprites).forEach(sprite => {
+            if (sprite.motion) {
+                sprite.x = sprite.motion.x + sprite.motion.dx * deltaMotion;
+                sprite.y = sprite.motion.y + sprite.motion.dy * deltaMotion;
+            }
+        });
     };
 
     componentDidMount() {
