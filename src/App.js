@@ -59,15 +59,17 @@ class App extends Component {
         let spritesToKeep = {};
         message.sprites.forEach(spriteData => {
             let sprite = this.sprites[spriteData.id];
-            if (!sprite) {
+            if (sprite) {
+                sprite.texture = this.textures[spriteData.texture];
+            } else {
                 console.log(`Adding sprite ${spriteData.id}`);
                 sprite = this.SpriteFromTexture(spriteData.texture);
                 sprite.z = spriteData.z;
                 this.app.stage.addChild(sprite);
                 this.sprites[spriteData.id] = sprite;
             }
-            sprite.x = spriteData.x * 64;
-            sprite.y = spriteData.y * 64;
+            sprite.x = spriteData.x * 16 * 3;
+            sprite.y = spriteData.y * 16 * 3;
             spritesToKeep[spriteData.id] = sprite;
         });
         Object.keys(this.sprites).forEach(id => {
@@ -191,7 +193,7 @@ class App extends Component {
 
     SpriteFromTexture = (texture) => {
         let sprite = new PIXI.Sprite(this.textures[texture]);
-        sprite.scale.set(4, 4);
+        sprite.scale.set(3, 3);
         sprite.anchor.x = 0;
         sprite.anchor.y = 0;
         return sprite;
@@ -199,7 +201,7 @@ class App extends Component {
 
     Setup = () => {
         this.textures = {}
-        for (const textureName of ["bones", "floor", "hero", "monster", "wall"]) {
+        for (const textureName of ["axe0", "axe1", "axe2", "axe3", "bones", "floor", "hero", "monster", "wall"]) {
             console.log("Loading texture: ", textureName);
             const texture = PIXI.loader.resources["rhymuArt.json"].textures[textureName + ".png"];
             texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
