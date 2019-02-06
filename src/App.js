@@ -232,8 +232,8 @@ class App extends Component {
 
     componentDidMount() {
         this.app = new PIXI.Application({
-            width: 1200,
-            height: 600,
+            width: 720,
+            height: 624,
             transparent: false
         });
         this.pixiContainer.appendChild(this.app.view);
