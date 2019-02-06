@@ -221,7 +221,6 @@ class App extends Component {
 
     Tick = (delta) => {
         this.deltaTime += delta / 60;
-        console.log("tick:", this.deltaTime);
         let deltaMotion = this.deltaTime * 16 * 3 / 0.1;
         Object.values(this.sprites).forEach(sprite => {
             if (sprite.motion) {
