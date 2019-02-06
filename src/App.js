@@ -199,7 +199,7 @@ class App extends Component {
 
     Setup = () => {
         this.textures = {}
-        for (const textureName of ["floor", "hero", "monster", "wall"]) {
+        for (const textureName of ["bones", "floor", "hero", "monster", "wall"]) {
             console.log("Loading texture: ", textureName);
             const texture = PIXI.loader.resources["rhymuArt.json"].textures[textureName + ".png"];
             texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
