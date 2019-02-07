@@ -229,6 +229,7 @@ class App extends Component {
         for (const textureName of [
             "axe", "bones", "floor", "hero", "monster", "wall",
             "food", "potion", "treasure",
+            "exit",
         ]) {
             console.log("Loading texture: ", textureName);
             const texture = PIXI.loader.resources["rhymuArt.json"].textures[textureName + ".png"];

@@ -183,6 +183,7 @@
         <map type="IndividualSpriteSettingsMap">
             <key type="filename">axe.png</key>
             <key type="filename">bones.png</key>
+            <key type="filename">exit.png</key>
             <key type="filename">floor.png</key>
             <key type="filename">food.png</key>
             <key type="filename">hero.png</key>
@@ -214,6 +215,7 @@
             <filename>food.png</filename>
             <filename>potion.png</filename>
             <filename>treasure.png</filename>
+            <filename>exit.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
