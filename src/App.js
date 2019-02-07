@@ -155,6 +155,15 @@ class App extends Component {
             }
             return;
         }
+        if (key === ' ') {
+            if (this.socket) {
+                this.socket.send(
+                    JSON.stringify({
+                        type: "potion",
+                    })
+                );
+            }
+        }
     }
 
     onKeyUp = (e) => {
