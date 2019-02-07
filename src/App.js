@@ -27,6 +27,10 @@ class App extends Component {
     OnConnected = (socket) => {
         console.log("Connected.");
         this.socket = socket;
+        Object.values(this.sprites).forEach(sprite => {
+            this.app.stage.removeChild(sprite);
+        });
+        this.sprites = {};
         this.setState({
             connecting: false,
             connected: true,
@@ -58,44 +62,40 @@ class App extends Component {
     }
 
     OnServerRender = (message) => {
-        let spritesToKeep = {};
         message.sprites.forEach(spriteData => {
             let sprite = this.sprites[spriteData.id];
-            if (sprite) {
-                sprite.texture = this.textures[spriteData.texture];
+            if (spriteData.destroyed) {
+                console.log(`Removing sprite ${spriteData.id}`);
+                this.app.stage.removeChild(this.sprites[spriteData.id]);
             } else {
-                console.log(`Adding sprite ${spriteData.id}`);
-                sprite = this.SpriteFromTexture(spriteData.texture);
-                sprite.z = spriteData.z;
-                this.app.stage.addChild(sprite);
-                this.sprites[spriteData.id] = sprite;
-            }
-            sprite.x = (0.5 + spriteData.x) * 16 * 3;
-            sprite.y = (0.5 + spriteData.y) * 16 * 3;
-            sprite.anchor.set(0.5);
-            if (spriteData.spinning) {
-                sprite.spinning = true;
-                sprite.phase = spriteData.phase;
-                sprite.rotation = spriteData.phase * 2 * Math.PI / 4;
-            }
-            if (spriteData.motion) {
-                sprite.motion = {
-                    x: sprite.x,
-                    y: sprite.y,
-                    dx: spriteData.motion.dx,
-                    dy: spriteData.motion.dy,
-                };
-            }
-            spritesToKeep[spriteData.id] = sprite;
-        });
-        Object.keys(this.sprites).forEach(id => {
-            if (!spritesToKeep[id]) {
-                console.log(`Removing sprite ${id}`);
-                this.app.stage.removeChild(this.sprites[id]);
+                if (sprite) {
+                    sprite.texture = this.textures[spriteData.texture];
+                } else {
+                    console.log(`Adding sprite ${spriteData.id}`);
+                    sprite = this.SpriteFromTexture(spriteData.texture);
+                    sprite.z = spriteData.z;
+                    this.app.stage.addChild(sprite);
+                    this.sprites[spriteData.id] = sprite;
+                }
+                sprite.x = (0.5 + spriteData.x) * 16 * 3;
+                sprite.y = (0.5 + spriteData.y) * 16 * 3;
+                sprite.anchor.set(0.5);
+                if (spriteData.spinning) {
+                    sprite.spinning = true;
+                    sprite.phase = spriteData.phase;
+                    sprite.rotation = spriteData.phase * 2 * Math.PI / 4;
+                }
+                if (spriteData.motion) {
+                    sprite.motion = {
+                        x: sprite.x,
+                        y: sprite.y,
+                        dx: spriteData.motion.dx,
+                        dy: spriteData.motion.dy,
+                    };
+                }
             }
         });
         this.app.stage.children.sort((a, b) => a.z - b.z);
-        this.sprites = spritesToKeep;
         this.setState({
             health: message.health,
             score: message.score,
