@@ -73,14 +73,17 @@ class App extends Component {
             sprite.x = (0.5 + spriteData.x) * 16 * 3;
             sprite.y = (0.5 + spriteData.y) * 16 * 3;
             sprite.anchor.set(0.5);
+            if (spriteData.spinning) {
+                sprite.spinning = true;
+                sprite.phase = spriteData.phase;
+                sprite.rotation = spriteData.phase * 2 * Math.PI / 4;
+            }
             if (spriteData.motion) {
-                sprite.rotation = spriteData.motion.phase * 2 * Math.PI / 4;
                 sprite.motion = {
                     x: sprite.x,
                     y: sprite.y,
                     dx: spriteData.motion.dx,
                     dy: spriteData.motion.dy,
-                    phase: spriteData.motion.phase,
                 };
             }
             spritesToKeep[spriteData.id] = sprite;
@@ -245,10 +248,12 @@ class App extends Component {
         let frameDelta = this.deltaTime * serverTickRate;
         let deltaMotion = frameDelta * 16 * 3;
         Object.values(this.sprites).forEach(sprite => {
+            if (sprite.spinning) {
+                sprite.rotation = (sprite.phase + frameDelta) * 2 * Math.PI / 4;
+            }
             if (sprite.motion) {
                 sprite.x = sprite.motion.x + sprite.motion.dx * deltaMotion;
                 sprite.y = sprite.motion.y + sprite.motion.dy * deltaMotion;
-                sprite.rotation = (sprite.motion.phase + frameDelta) * 2 * Math.PI / 4;
             }
         });
     };
