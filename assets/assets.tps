@@ -181,10 +181,7 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">axe0.png</key>
-            <key type="filename">axe1.png</key>
-            <key type="filename">axe2.png</key>
-            <key type="filename">axe3.png</key>
+            <key type="filename">axe.png</key>
             <key type="filename">bones.png</key>
             <key type="filename">floor.png</key>
             <key type="filename">hero.png</key>
@@ -210,10 +207,7 @@
             <filename>wall.png</filename>
             <filename>floor.png</filename>
             <filename>bones.png</filename>
-            <filename>axe0.png</filename>
-            <filename>axe1.png</filename>
-            <filename>axe2.png</filename>
-            <filename>axe3.png</filename>
+            <filename>axe.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

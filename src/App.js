@@ -70,12 +70,16 @@ class App extends Component {
             }
             sprite.x = spriteData.x * 16 * 3;
             sprite.y = spriteData.y * 16 * 3;
+            sprite.anchor.set(0.5);
             if (spriteData.motion) {
+                sprite.rotation = spriteData.motion.phase * 2 * Math.PI / 4;
+                console.log("rotation:", sprite.rotation);
                 sprite.motion = {
                     x: sprite.x,
                     y: sprite.y,
                     dx: spriteData.motion.dx,
                     dy: spriteData.motion.dy,
+                    phase: spriteData.motion.phase,
                 };
             }
             spritesToKeep[spriteData.id] = sprite;
@@ -210,7 +214,7 @@ class App extends Component {
 
     Setup = () => {
         this.textures = {}
-        for (const textureName of ["axe0", "axe1", "axe2", "axe3", "bones", "floor", "hero", "monster", "wall"]) {
+        for (const textureName of ["axe", "bones", "floor", "hero", "monster", "wall"]) {
             console.log("Loading texture: ", textureName);
             const texture = PIXI.loader.resources["rhymuArt.json"].textures[textureName + ".png"];
             texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
@@ -221,11 +225,13 @@ class App extends Component {
 
     Tick = (delta) => {
         this.deltaTime += delta / 60;
-        let deltaMotion = this.deltaTime * 16 * 3 / 0.1;
+        let frameDelta = this.deltaTime / 0.1;
+        let deltaMotion = frameDelta * 16 * 3;
         Object.values(this.sprites).forEach(sprite => {
             if (sprite.motion) {
                 sprite.x = sprite.motion.x + sprite.motion.dx * deltaMotion;
                 sprite.y = sprite.motion.y + sprite.motion.dy * deltaMotion;
+                sprite.rotation = (sprite.motion.phase + frameDelta) * 2 * Math.PI / 4;
             }
         });
     };
