@@ -16,6 +16,8 @@ class App extends Component {
             fire: null,
             move: null,
             health: null,
+            score: null,
+            potions: null,
         };
     }
 
@@ -68,8 +70,8 @@ class App extends Component {
                 this.app.stage.addChild(sprite);
                 this.sprites[spriteData.id] = sprite;
             }
-            sprite.x = spriteData.x * 16 * 3;
-            sprite.y = spriteData.y * 16 * 3;
+            sprite.x = (0.5 + spriteData.x) * 16 * 3;
+            sprite.y = (0.5 + spriteData.y) * 16 * 3;
             sprite.anchor.set(0.5);
             if (spriteData.motion) {
                 sprite.rotation = spriteData.motion.phase * 2 * Math.PI / 4;
@@ -92,7 +94,9 @@ class App extends Component {
         this.app.stage.children.sort((a, b) => a.z - b.z);
         this.sprites = spritesToKeep;
         this.setState({
-            health: message.health
+            health: message.health,
+            score: message.score,
+            potions: message.potions,
         });
         this.deltaTime = 0.0;
     }
@@ -213,7 +217,10 @@ class App extends Component {
 
     Setup = () => {
         this.textures = {}
-        for (const textureName of ["axe", "bones", "floor", "hero", "monster", "wall"]) {
+        for (const textureName of [
+            "axe", "bones", "floor", "hero", "monster", "wall",
+            "food", "potion", "treasure",
+        ]) {
             console.log("Loading texture: ", textureName);
             const texture = PIXI.loader.resources["rhymuArt.json"].textures[textureName + ".png"];
             texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
@@ -287,8 +294,10 @@ class App extends Component {
             <div className="App">
                 {stage}
                 {connection}
-                <div>
+                <div className="App-stats">
+                    <h2>Score: {this.state.score}</h2>
                     <h2>Health: {this.state.health}</h2>
+                    <h2>Potions: {this.state.potions}</h2>
                 </div>
                 <div className="App-debug">
                     <div>Fire: {this.state.fire}</div>

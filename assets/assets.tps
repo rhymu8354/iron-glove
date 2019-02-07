@@ -184,8 +184,11 @@
             <key type="filename">axe.png</key>
             <key type="filename">bones.png</key>
             <key type="filename">floor.png</key>
+            <key type="filename">food.png</key>
             <key type="filename">hero.png</key>
             <key type="filename">monster.png</key>
+            <key type="filename">potion.png</key>
+            <key type="filename">treasure.png</key>
             <key type="filename">wall.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -208,6 +211,9 @@
             <filename>floor.png</filename>
             <filename>bones.png</filename>
             <filename>axe.png</filename>
+            <filename>food.png</filename>
+            <filename>potion.png</filename>
+            <filename>treasure.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

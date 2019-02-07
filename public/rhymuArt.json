@@ -24,7 +24,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
 	"sourceSize": {"w":16,"h":16}
 },
-"hero.png":
+"food.png":
 {
 	"frame": {"x":48,"y":0,"w":16,"h":16},
 	"rotated": false,
@@ -32,7 +32,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
 	"sourceSize": {"w":16,"h":16}
 },
-"monster.png":
+"hero.png":
 {
 	"frame": {"x":64,"y":0,"w":16,"h":16},
 	"rotated": false,
@@ -40,9 +40,33 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
 	"sourceSize": {"w":16,"h":16}
 },
-"wall.png":
+"monster.png":
 {
 	"frame": {"x":80,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"potion.png":
+{
+	"frame": {"x":96,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"treasure.png":
+{
+	"frame": {"x":112,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"wall.png":
+{
+	"frame": {"x":128,"y":0,"w":16,"h":16},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
@@ -53,8 +77,8 @@
 	"version": "1.0",
 	"image": "rhymuArt.png",
 	"format": "RGBA8888",
-	"size": {"w":96,"h":16},
+	"size": {"w":144,"h":16},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:dbf8c7ae422bc507a9964cd25c5b2a64:7cf6d8b8a68437492800c266fc3c6481:c3d88e630526f4dff24d4f6375d0257a$"
+	"smartupdate": "$TexturePacker:SmartUpdate:5c1f7501fa80b9496c46841812bf2b45:641310e9e44e20eb6dc8400184d3c9f0:c3d88e630526f4dff24d4f6375d0257a$"
 }
 }
