@@ -73,7 +73,6 @@ class App extends Component {
             sprite.anchor.set(0.5);
             if (spriteData.motion) {
                 sprite.rotation = spriteData.motion.phase * 2 * Math.PI / 4;
-                console.log("rotation:", sprite.rotation);
                 sprite.motion = {
                     x: sprite.x,
                     y: sprite.y,
@@ -225,7 +224,8 @@ class App extends Component {
 
     Tick = (delta) => {
         this.deltaTime += delta / 60;
-        let frameDelta = this.deltaTime / 0.1;
+        let serverTickRate = 10.0;
+        let frameDelta = this.deltaTime * serverTickRate;
         let deltaMotion = frameDelta * 16 * 3;
         Object.values(this.sprites).forEach(sprite => {
             if (sprite.motion) {
