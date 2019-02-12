@@ -11,13 +11,8 @@ class App extends Component {
         this.sprites = {};
         this.socket = null;
         this.state = {
-            connecting: false,
-            connected: false,
             fire: null,
             move: null,
-            health: null,
-            score: null,
-            potions: null,
         };
     }
 
@@ -33,10 +28,6 @@ class App extends Component {
         this.sprites = {};
         this.connectingLabel.hide();
         this.disconnectButton.show();
-        this.setState({
-            connecting: false,
-            connected: true,
-        });
         this.socket.send(
             JSON.stringify({
                 type: "hello",
@@ -53,10 +44,6 @@ class App extends Component {
             this.socket = null;
             this.disconnectButton.hide();
             this.connectButton.show();
-            this.setState({
-                connecting: false,
-                connected: false,
-            });
         }
     }
 
@@ -100,11 +87,6 @@ class App extends Component {
             }
         });
         this.app.stage.children.sort((a, b) => a.z - b.z);
-        this.setState({
-            health: message.health,
-            score: message.score,
-            potions: message.potions,
-        });
         const numPotions = message.potions;
         this.scoreValue.text = message.score;
         this.healthValue.text = message.health;
@@ -141,12 +123,7 @@ class App extends Component {
         console.log("Connecting...");
         this.connectButton.hide();
         this.connectingLabel.show();
-        this.setState(
-            {
-                connecting: true,
-            },
-            () => this.Connect()
-        );
+        this.Connect();
     }
 
     onKeyDown = (e) => {
