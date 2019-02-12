@@ -243,7 +243,7 @@ class App extends Component {
 
     SpriteFromTexture = (texture) => {
         let sprite = new PIXI.Sprite(this.textures[texture]);
-        sprite.scale.set(3, 3);
+        sprite.scale.set(3);
         sprite.anchor.x = 0;
         sprite.anchor.y = 0;
         return sprite;
