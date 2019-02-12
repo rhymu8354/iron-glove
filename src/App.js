@@ -279,16 +279,26 @@ class App extends Component {
     }
 
     CreateButtonBody(x, y, width, height, baseColor, v) {
-        const body = new PIXI.Graphics();
-        body
+        const bodyGraphic = new PIXI.Graphics();
+        bodyGraphic
             .lineStyle(2, baseColor)
             .beginFill(this.ColorLerp(0, baseColor, v))
             .drawRoundedRect(
-                x - width / 2,
-                y - height / 2,
-                width, height, 15
+                0, 0,
+                width / 3, height / 3, 6
             )
             .endFill();
+        var bodyTexture = this.app.renderer.generateTexture(
+            bodyGraphic,
+            PIXI.SCALE_MODES.NEAREST,
+            1,
+            new PIXI.Rectangle(-1, -1, width / 3 + 3, height / 3 + 3)
+        );
+        const body = new PIXI.Sprite(bodyTexture);
+        body.x = x;
+        body.y = y;
+        body.anchor.set(0.5);
+        body.scale.set(3);
         body.interactive = true;
         body.buttonMode = true;
         return body;
