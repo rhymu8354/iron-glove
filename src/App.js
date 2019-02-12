@@ -105,8 +105,22 @@ class App extends Component {
             score: message.score,
             potions: message.potions,
         });
+        const numPotions = message.potions;
         this.scoreValue.text = message.score;
         this.healthValue.text = message.health;
+        while (this.potions.length < numPotions) {
+            const potion = new PIXI.Sprite(this.textures["potion"]);
+            potion.scale.set(2, 2);
+            potion.anchor.set(1, 0);
+            potion.x = -this.potions.length * (potion.width - 10);
+            potion.y = 0;
+            this.potionsContainer.addChild(potion);
+            this.potions.push(potion);
+        }
+        while (this.potions.length > numPotions) {
+            const potion = this.potions.pop();
+            this.potionsContainer.removeChild(potion);
+        }
         this.deltaTime = 0.0;
     }
 
@@ -391,29 +405,36 @@ class App extends Component {
         this.connectButton.show();
         const controlPanelLeftAnchorX = this.stageWidth + this.controlPanelWidth * 1 / 2;
         const controlPanelRightAnchorX = this.stageWidth + this.controlPanelWidth * 5 / 8;
-        const scoreHealthCenterY = connectButtonCenterY + this.connectButton.height + 20;
+        const scoreHealthTop = connectButtonCenterY + this.connectButton.height / 2 + 20;
         this.scoreLabel = this.CreateLabel(
             "SCORE", 18,
-            controlPanelLeftAnchorX, scoreHealthCenterY,
+            controlPanelLeftAnchorX, scoreHealthTop,
             0xff0000
         );
         this.scoreLabel.setAnchor(1, 0);
         this.scoreValue = this.CreateLabel(
             "0", 28,
-            controlPanelLeftAnchorX, scoreHealthCenterY + this.scoreLabel.height,
+            controlPanelLeftAnchorX, scoreHealthTop + this.scoreLabel.height,
             0xff0000
         );
         this.scoreValue.setAnchor(1, 0);
         this.healthLabel = this.CreateLabel(
             "HEALTH", 18,
-            controlPanelRightAnchorX, scoreHealthCenterY,
+            controlPanelRightAnchorX, scoreHealthTop,
             0xff0000
         );
+        const healthValueTop = scoreHealthTop + this.healthLabel.height;
         this.healthValue = this.CreateLabel(
             "0", 28,
-            controlPanelRightAnchorX, scoreHealthCenterY + this.healthLabel.height,
+            controlPanelRightAnchorX, healthValueTop,
             0xff0000
         );
+        const potionsTop = healthValueTop + this.healthValue.height;
+        this.potions = [];
+        this.potionsContainer = new PIXI.Container();
+        this.potionsContainer.x = this.stageWidth + this.controlPanelWidth - 5;
+        this.potionsContainer.y = potionsTop;
+        this.app.stage.addChild(this.potionsContainer);
         this.scoreLabel.show();
         this.scoreValue.show();
         this.healthLabel.show();
@@ -469,13 +490,6 @@ class App extends Component {
         return (
             <div className="App">
                 {stage}
-                <div className="App-stats">
-                    <h2>Potions: {this.state.potions}</h2>
-                </div>
-                <div className="App-debug">
-                    <div>Fire: {this.state.fire}</div>
-                    <div>Move: {this.state.move}</div>
-                </div>
             </div>
         );
     }
