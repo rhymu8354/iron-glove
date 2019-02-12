@@ -31,6 +31,8 @@ class App extends Component {
             this.app.stage.removeChild(sprite);
         });
         this.sprites = {};
+        this.connectingLabel.hide();
+        this.disconnectButton.show();
         this.setState({
             connecting: false,
             connected: true,
@@ -49,6 +51,8 @@ class App extends Component {
         if (this.socket === socket) {
             console.log("Disconnected from the game");
             this.socket = null;
+            this.disconnectButton.hide();
+            this.connectButton.show();
             this.setState({
                 connecting: false,
                 connected: false,
@@ -101,6 +105,8 @@ class App extends Component {
             score: message.score,
             potions: message.potions,
         });
+        this.scoreValue.text = message.score;
+        this.healthValue.text = message.health;
         this.deltaTime = 0.0;
     }
 
@@ -119,6 +125,8 @@ class App extends Component {
 
     OnConnect = () => {
         console.log("Connecting...");
+        this.connectButton.hide();
+        this.connectingLabel.show();
         this.setState(
             {
                 connecting: true,
@@ -227,6 +235,127 @@ class App extends Component {
         return sprite;
     };
 
+    RgbToComponents(rgb) {
+        const r = (rgb >> 16);
+        const g = ((rgb >> 8) & 0xff);
+        const b = (rgb & 0xff);
+        return [r, g, b];
+    }
+
+    RgbFromComponents(r, g, b) {
+        return (
+            (r << 16)
+            | (g << 8)
+            | b
+        );
+    }
+
+    Lerp(x, y, a) {
+        return (x + a * (y - x));
+    }
+
+    ColorLerp(rgb1, rgb2, a) {
+        const [r1, g1, b1] = this.RgbToComponents(rgb1);
+        const [r2, g2, b2] = this.RgbToComponents(rgb2);
+        return this.RgbFromComponents(
+            this.Lerp(r1, r2, a),
+            this.Lerp(g1, g2, a),
+            this.Lerp(b1, b2, a),
+        );
+    }
+
+    CreateButtonBody(x, y, width, height, baseColor, v) {
+        const body = new PIXI.Graphics();
+        body
+            .lineStyle(2, baseColor)
+            .beginFill(this.ColorLerp(0, baseColor, v))
+            .drawRoundedRect(
+                x - width / 2,
+                y - height / 2,
+                width, height, 15
+            )
+            .endFill();
+        body.interactive = true;
+        body.buttonMode = true;
+        return body;
+    }
+
+    CreateLabel = (text, fontSize, x, y, fillColor = 0xffffff, fontWeight = "normal") => {
+        const labelText = new PIXI.Text(
+            text,
+            {
+                fontSize: fontSize,
+                fontWeight: fontWeight,
+                fill: fillColor,
+            }
+        );
+        labelText.x = x;
+        labelText.y = y;
+        const label = {
+            app: this.app,
+            labelText: labelText,
+            width: labelText.width,
+            height: labelText.height,
+            hide: function() {
+                this.app.stage.removeChild(this.labelText);
+            },
+            show: function() {
+                this.app.stage.addChild(this.labelText);
+            },
+            setAnchor: labelText.anchor.set.bind(labelText.anchor),
+            set text(value) {
+                this.labelText.text = value;
+            },
+        };
+        return label;
+    };
+
+    CreateButton = (text, fontSize, x, y, baseColor, onPointerDown) => {
+        const label = this.CreateLabel(text, fontSize, x, y);
+        label.setAnchor(0.5);
+        const width = label.width + fontSize;
+        const height = label.height + fontSize;
+        const bodyContainer = new PIXI.Container();
+        const unlitBody = this.CreateButtonBody(x, y, width, height, baseColor, 0.35);
+        const litBody = this.CreateButtonBody(x, y, width, height, baseColor, 0.5);
+        bodyContainer.addChild(unlitBody);
+        const button = {
+            bodyContainer: bodyContainer,
+            unlitBody: unlitBody,
+            litBody: litBody,
+            label: label,
+            width: width,
+            height: height,
+            app: this.app,
+            hide: function() {
+                this.label.hide();
+                this.app.stage.removeChild(this.bodyContainer);
+            },
+            show: function() {
+                const pointer = this.app.renderer.plugins.interaction.mouse.global;
+                if (this.litBody.containsPoint(pointer)) {
+                    this.bodyContainer.addChild(this.litBody);
+                    this.bodyContainer.removeChild(this.unlitBody);
+                } else {
+                    this.bodyContainer.addChild(this.unlitBody);
+                    this.bodyContainer.removeChild(this.litBody);
+                }
+                this.app.stage.addChild(this.bodyContainer);
+                this.label.show();
+            },
+        };
+        unlitBody.on("pointerover", () => {
+            bodyContainer.removeChild(unlitBody);
+            bodyContainer.addChild(litBody);
+        });
+        litBody.on("pointerdown", onPointerDown);
+        litBody.on("pointerout", () => {
+            bodyContainer.removeChild(litBody);
+            bodyContainer.addChild(unlitBody);
+        });
+        return button;
+    };
+
     Setup = () => {
         this.textures = {}
         for (const textureName of [
@@ -239,6 +368,56 @@ class App extends Component {
             texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
             this.textures[textureName] = texture;
         }
+        const controlPanelCenterX = this.stageWidth + this.controlPanelWidth / 2;
+        const connectButtonCenterY = 80;
+        this.connectButton = this.CreateButton(
+            "Connect", 24,
+            controlPanelCenterX, connectButtonCenterY,
+            0x00f8ff,
+            () => this.OnConnect()
+        );
+        this.connectingLabel = this.CreateLabel(
+            "Connecting...", 24,
+            controlPanelCenterX, connectButtonCenterY,
+            0x00ff00
+        );
+        this.connectingLabel.setAnchor(0.5);
+        this.disconnectButton = this.CreateButton(
+            "Disconnect", 24,
+            controlPanelCenterX, connectButtonCenterY,
+            0xff0000,
+            () => this.OnDisconnect()
+        );
+        this.connectButton.show();
+        const controlPanelLeftAnchorX = this.stageWidth + this.controlPanelWidth * 1 / 2;
+        const controlPanelRightAnchorX = this.stageWidth + this.controlPanelWidth * 5 / 8;
+        const scoreHealthCenterY = connectButtonCenterY + this.connectButton.height + 20;
+        this.scoreLabel = this.CreateLabel(
+            "SCORE", 18,
+            controlPanelLeftAnchorX, scoreHealthCenterY,
+            0xff0000
+        );
+        this.scoreLabel.setAnchor(1, 0);
+        this.scoreValue = this.CreateLabel(
+            "0", 28,
+            controlPanelLeftAnchorX, scoreHealthCenterY + this.scoreLabel.height,
+            0xff0000
+        );
+        this.scoreValue.setAnchor(1, 0);
+        this.healthLabel = this.CreateLabel(
+            "HEALTH", 18,
+            controlPanelRightAnchorX, scoreHealthCenterY,
+            0xff0000
+        );
+        this.healthValue = this.CreateLabel(
+            "0", 28,
+            controlPanelRightAnchorX, scoreHealthCenterY + this.healthLabel.height,
+            0xff0000
+        );
+        this.scoreLabel.show();
+        this.scoreValue.show();
+        this.healthLabel.show();
+        this.healthValue.show();
         this.app.ticker.add(delta => this.Tick(delta));
     };
 
@@ -259,8 +438,10 @@ class App extends Component {
     };
 
     componentDidMount() {
+        this.stageWidth = 720;
+        this.controlPanelWidth = 200;
         this.app = new PIXI.Application({
-            width: 720,
+            width: this.stageWidth + this.controlPanelWidth,
             height: 624,
             transparent: false
         });
@@ -285,33 +466,10 @@ class App extends Component {
                 }}
             />
         );
-        let connection = null;
-        if (this.state.connected) {
-            connection = (
-                <div>
-                    <button onClick={() => this.OnDisconnect(this.socket)}>Disconnect</button>
-                </div>
-            );
-        } else if (this.state.connecting) {
-            connection = (
-                <div>
-                    Connecting...
-                </div>
-            );
-        } else {
-            connection = (
-                <div>
-                    <button onClick={() => this.OnConnect()}>Connect</button>
-                </div>
-            );
-        }
         return (
             <div className="App">
                 {stage}
-                {connection}
                 <div className="App-stats">
-                    <h2>Score: {this.state.score}</h2>
-                    <h2>Health: {this.state.health}</h2>
                     <h2>Potions: {this.state.potions}</h2>
                 </div>
                 <div className="App-debug">
