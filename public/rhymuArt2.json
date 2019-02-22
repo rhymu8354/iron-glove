@@ -1,0 +1,230 @@
+{
+	"textures": [
+		{
+			"image": "rhymuArt2.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 58,
+				"h": 53
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "axe.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 3,
+						"w": 10,
+						"h": 9
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 10,
+						"h": 9
+					}
+				},
+				{
+					"filename": "monster.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 2,
+						"w": 15,
+						"h": 13
+					},
+					"frame": {
+						"x": 13,
+						"y": 1,
+						"w": 15,
+						"h": 13
+					}
+				},
+				{
+					"filename": "bones.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 14,
+						"h": 15
+					},
+					"frame": {
+						"x": 30,
+						"y": 1,
+						"w": 14,
+						"h": 15
+					}
+				},
+				{
+					"filename": "potion.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 0,
+						"w": 11,
+						"h": 15
+					},
+					"frame": {
+						"x": 46,
+						"y": 1,
+						"w": 11,
+						"h": 15
+					}
+				},
+				{
+					"filename": "exit.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 16,
+						"h": 16
+					},
+					"frame": {
+						"x": 1,
+						"y": 16,
+						"w": 16,
+						"h": 16
+					}
+				},
+				{
+					"filename": "floor.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 15,
+						"h": 16
+					},
+					"frame": {
+						"x": 19,
+						"y": 18,
+						"w": 15,
+						"h": 16
+					}
+				},
+				{
+					"filename": "food.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 16,
+						"h": 16
+					},
+					"frame": {
+						"x": 36,
+						"y": 18,
+						"w": 16,
+						"h": 16
+					}
+				},
+				{
+					"filename": "hero.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 16,
+						"h": 16
+					},
+					"frame": {
+						"x": 1,
+						"y": 34,
+						"w": 16,
+						"h": 16
+					}
+				},
+				{
+					"filename": "treasure.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 16,
+						"h": 16
+					},
+					"frame": {
+						"x": 19,
+						"y": 36,
+						"w": 16,
+						"h": 16
+					}
+				},
+				{
+					"filename": "wall.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 16,
+						"h": 16
+					},
+					"frame": {
+						"x": 37,
+						"y": 36,
+						"w": 16,
+						"h": 16
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:3443b5d524385b361fdbe0affaf67dd0:fcf317ad24a901829c396b031e3185ce:925b865db98944352cc3217a97935e2b$"
+	}
+}
